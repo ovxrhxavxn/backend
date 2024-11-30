@@ -26,7 +26,7 @@ app = FastAPI(
 
 routers = [
 
-    #TODO: добавить роутеры
+    notes_router
 ]
 
 for router in routers:
