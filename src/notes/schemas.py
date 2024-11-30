@@ -1,12 +1,24 @@
+from datetime import date
+
 from pydantic import BaseModel
 
-from database.annotated_types import intpk, utcnow
 from .enums import Consumable
 
 
-class Note(BaseModel):
+class NoteBase(BaseModel):
 
-    id: intpk
-    date: utcnow
+    date: date
     consumable: Consumable
     count: int
+
+
+class NoteCreate(NoteBase):
+    pass
+
+
+class Note(NoteBase):
+
+    id: int
+
+    class Config:
+        from_attributes = True
