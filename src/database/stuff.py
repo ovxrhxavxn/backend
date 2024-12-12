@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 class Base(DeclarativeBase): pass
 
 
-db_url = "sqlite+aiosqlite:///database/app.db"
+db_url = "sqlite+aiosqlite:///src/database/app.db"
 
 async_engine = create_async_engine(
              
