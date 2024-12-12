@@ -3,8 +3,8 @@ from enum import StrEnum
 
 class Consumable(StrEnum):
 
-    INSULIN = 'Insulin'
-    TEST_STRIPS = 'Test Strips'
-    GLUCOMETER = 'Glucometer'
-    RESERVOIR = 'Reservoir'
-    INFUSION_SET = 'Infusion set'
+    INSULIN = 'Инсулин'
+    TEST_STRIPS = 'Тест-полоски'
+    GLUCOMETER = 'Глюкометр'
+    RESERVOIR = 'Резервуар'
+    INFUSION_SET = 'Инфузионный набор'
