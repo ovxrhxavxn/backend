@@ -1,0 +1,23 @@
+<p class="text-center">
+
+    <div id="fixed-button">
+        <p class="text-center">
+            <button type="button" class="btn btn-success btn-sm"
+                hx-get="/templates/add_note" hx-target="#content" hx-swap="innerHTML" hx-trigger="click">
+                Добавить
+            </button>
+        </p>
+    </div>
+
+</p>
+
+<style>
+
+    #fixed-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+</style>
