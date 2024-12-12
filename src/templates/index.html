@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DiaLog</title>
+    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style src="/src/static/style.css"></style>
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+
+</head>
+
+<body>
+
+    <div id="header">
+        <p class="fs-2 text-center">DiaLog</p>
+    </div>
+
+    <div id="content" hx-get="/templates/main_content" hx-swap="beforeend" hx-trigger="load"></div>
+
+</body>
+
+</html>
