@@ -28,7 +28,7 @@ async def get_add_button(
 
     ):
     
-    return templates.TemplateResponse('main_buttons.html', {'request' : request})
+    return templates.TemplateResponse('add_button.html', {'request' : request})
 
 
 @router.get('/main_content', response_class=HTMLResponse)
