@@ -18,6 +18,15 @@ class NoteRepository(AbstractNoteRepository, SQLAlchemyRepository):
 
     model = Note
 
+    async def get_rows_count(self):
+        async with async_session_maker() as session:
+            query = select(self.model)
+
+            result = await session.execute(query)
+
+            return result
+        
+        
     async def get_by_id(self, id: int) -> Note:
         async with async_session_maker() as session:
             query = select(self.model).where(self.model.id == id)
