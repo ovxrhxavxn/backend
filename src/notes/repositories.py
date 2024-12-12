@@ -60,26 +60,10 @@ class NoteRepository(AbstractNoteRepository, SQLAlchemyRepository):
             await session.execute(stmt)
             await session.commit()
 
-
-    async def edit_date(self, id: int, new_date: date):
+    
+    async def update_note(self, id: int, schema: dict):
         async with async_session_maker() as session:
-            stmt = update(self.model).where(self.model.id == id).values(date = new_date)
-
-            await session.execute(stmt)
-            await session.commit()
-
-        
-    async def edit_count(self, id: int, new_count: int):
-        async with async_session_maker() as session:
-            stmt = update(self.model).where(self.model.id == id).values(count = new_count)
-
-            await session.execute(stmt)
-            await session.commit()
-
-
-    async def edit_consumable(self, id: int, new_consumable: int):
-        async with async_session_maker() as session:
-            stmt = update(self.model).where(self.model.id == id).values(consumable = new_consumable)
+            stmt = update(self.model).where(self.model.id == id).values(**schema)
 
             await session.execute(stmt)
             await session.commit()
@@ -88,6 +72,15 @@ class NoteRepository(AbstractNoteRepository, SQLAlchemyRepository):
     async def get(self, limit: int, offset: int):
         async with async_session_maker() as session:
             query = select(self.model).limit(limit).offset(offset)
+
+            result = await session.execute(query)
+
+            return result.all()
+        
+        
+    async def get_all(self):
+        async with async_session_maker() as session:
+            query = select(self.model)
 
             result = await session.execute(query)
 
