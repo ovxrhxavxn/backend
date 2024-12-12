@@ -6,7 +6,8 @@ def main():
     uvicorn.run(
 
         "app:app", 
-        reload=True
+        reload=True,
+        host="localhost"
     )
 
 
