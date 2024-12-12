@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from datetime import date
 
 from notes.schemas import Note
-from notes.enums import Consumable
 
 
 class SQLAlchemyRepository(ABC):
@@ -11,6 +10,10 @@ class SQLAlchemyRepository(ABC):
 
 
 class AbstractNoteRepository(ABC):
+
+    @abstractmethod
+    async def get_rows_count(self) -> int:
+        raise NotImplementedError
 
     @abstractmethod
     async def get_by_year(self, date: date):
@@ -29,17 +32,13 @@ class AbstractNoteRepository(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    async def edit_date(self, id: int, new_date: date):
-        raise NotImplementedError
-    
-    @abstractmethod
-    async def edit_count(self, id: int, new_count: int):
-        raise NotImplementedError
-    
-    @abstractmethod
-    async def edit_consumable(self, id: int, new_consumable: Consumable):
+    async def update_note(self, id: int, schema: dict):
         raise NotImplementedError
     
     @abstractmethod
     async def get(self, limit: int, offset: int):
+        raise NotImplementedError
+    
+    @abstractmethod
+    async def get_all(self):
         raise NotImplementedError
