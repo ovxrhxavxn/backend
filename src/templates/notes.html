@@ -1,10 +1,12 @@
-<div id="notes_table" hx-trigger="event:htmx:afterOnLoad">
+<div id="notes_table" hx-get="templates/notes/" hx-swap="innerHTML"
+
+    hx-trigger="click from:#btn_del">
+
     <div class="table-container">
         <table class="table table-hover table-bordered">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
-                    <th>Id</th>
                     <th>Дата</th>
                     <th>Расходник</th>
                     <th>Количество</th>
@@ -13,9 +15,8 @@
             </thead>
             <tbody>
                 {% for note in notes %}
-                <tr>
+                <tr data-note-id="{{ note.id }}">
                     <td>{{ loop.index }}</td>
-                    <td>{{ note.id }}</td>
                     <td>
                         <input type="date" name="date" value="{{ note.date }}" class="form-control" readonly>
                     </td>
@@ -27,13 +28,12 @@
                         </select>
                     </td>
                     <td>
-                        <input type="number" name="count" value="{{ note.count }}" class="form-control" readonly>
+                        <input type="number" name="count" value="{{ note.count }}" class="form-control" min=1 readonly>
                         <div class="invalid-feedback" style="display:none;">Необходимо заполнить данное поле</div>
                     </td>
                     <td>
-                        <button class="btn btn-outline-danger btn-sm"
-                                hx-delete="/notes/{{ note.id }}"
-                                hx-target="#notes_table">
+                        <button class="btn btn-outline-danger btn-sm" id="btn_del"
+                                hx-delete="/notes/{{ note.id }}">
                             Удалить
                         </button>
                         <button class="btn btn-outline-primary btn-sm edit-btn">
@@ -52,76 +52,10 @@
 
 <style>
 
-#notes_tabler {
-    max-height: 630px; /* Задайте нужную высоту */
-    overflow-y: auto;
-    position: relative;
-}
-
 .table-container thead th {
     position: sticky;
     top: 0;
     z-index: 1;
 }
+
 </style>
-
-
-<script>
-document.body.addEventListener('htmx:afterOnLoad', function(event) {
-    if (event.detail.elt && event.detail.elt.matches('button[hx-delete]')) {
-        htmx.ajax('GET', '/templates/notes', {target: '#notes_table'});
-    }
-});
-
-document.body.addEventListener('click', function(event) {
-    if (event.target.classList.contains('edit-btn')) {
-        let row = event.target.closest('tr');
-        row.querySelectorAll('input').forEach(input => input.removeAttribute('readonly'));
-        row.querySelector('select[name="consumable"]').removeAttribute('disabled');
-        row.querySelector('.edit-btn').style.display = 'none';
-        row.querySelector('.save-btn').style.display = 'inline-block';
-    }
-});
-
-document.body.addEventListener('click', function(event) {
-    if (event.target.classList.contains('save-btn')) {
-        let row = event.target.closest('tr');
-        let countInput = row.querySelector('input[name="count"]');
-        let countError = countInput.nextElementSibling;
-
-        // Очистка предыдущих ошибок
-        countError.style.display = 'none';
-
-        // Валидация поля "Количество"
-        if (!countInput.value) {
-            countError.style.display = 'block';
-            countInput.focus();
-            return;
-        }
-
-        let data = {
-            id: row.querySelector('td:nth-child(2)').textContent, // Изменено на вторую колонку
-            date: row.querySelector('input[name="date"]').value,
-            consumable: row.querySelector('select[name="consumable"]').value,
-            count: countInput.value
-        };
-
-        fetch(`/notes/${data.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(response => {
-            if (response.ok) {
-                row.querySelectorAll('input').forEach(input => input.setAttribute('readonly', 'readonly'));
-                row.querySelector('select[name="consumable"]').setAttribute('disabled', 'disabled');
-                row.querySelector('.edit-btn').style.display = 'inline-block';
-                row.querySelector('.save-btn').style.display = 'none';
-            } else {
-                console.error('Ошибка при сохранении данных');
-            }
-        }).catch(error => console.error('Ошибка:', error));
-    }
-});
-</script>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>DiaLog</title>
-    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ovxrhxavxn/dialog/refs/heads/dev/src/templates/static/favicon.ico">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style src="/src/static/style.css"></style>
@@ -22,6 +22,50 @@
 
     <div id="content" hx-get="/templates/main_content" hx-swap="beforeend" hx-trigger="load"></div>
 
+    <script>
+
+        document.body.addEventListener('click', function(event) {
+            if (event.target.classList.contains('edit-btn')) {
+                let row = event.target.closest('tr');
+                row.querySelectorAll('input').forEach(input => input.removeAttribute('readonly'));
+                row.querySelector('select').removeAttribute('disabled');
+                row.querySelector('.edit-btn').style.display = 'none';
+                row.querySelector('.save-btn').style.display = 'inline-block';
+            }
+        
+            if (event.target.classList.contains('save-btn')) {
+                let saveButton = event.target;
+                let row = saveButton.closest('tr');
+                let noteId = row.dataset.noteId;
+        
+                const data = {
+                    date: row.querySelector('input[name="date"]').value,
+                    consumable: row.querySelector('select[name="consumable"]').value,
+                    count: row.querySelector('input[name="count"]').value,
+                };
+        
+                fetch('/notes/' + noteId, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        row.querySelectorAll('input').forEach(input => input.setAttribute('readonly', true));
+                        row.querySelector('select').setAttribute('disabled', true);
+                        row.querySelector('.save-btn').style.display = 'none';
+                        row.querySelector('.edit-btn').style.display = 'inline-block';
+                    } else {
+                        console.error('Ошибка сохранения');
+                    }
+                }).catch(error => {
+                    console.error('Ошибка сети:', error);
+                });
+            }
+        });
+        
+        </script>
 </body>
 
 </html>

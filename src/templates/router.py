@@ -56,7 +56,15 @@ async def get_notes(
 
     consumables = [consumable for consumable in Consumable]
 
-    return templates.TemplateResponse('notes.html', {'request' : request, 'notes' : notes, 'consumables': consumables})
+    return templates.TemplateResponse('notes.html', 
+                                      
+                                    {
+                                        'request' : request, 
+                                        'notes' : notes, 
+                                        'consumables': consumables
+                                    }
+                                )
+                                       
 
 
 @router.get('/notes', response_class=HTMLResponse)
@@ -72,7 +80,14 @@ async def get_all_notes(
 
     consumables = [consumable for consumable in Consumable]
 
-    return templates.TemplateResponse('notes.html', {'request' : request, 'notes' : notes, 'consumables': consumables})
+    return templates.TemplateResponse('notes.html', 
+                                      
+                                    {
+                                        'request' : request, 
+                                        'notes' : notes, 
+                                        'consumables': consumables
+                                    }
+                                )
 
 
 @router.get('/add_note', response_class=HTMLResponse)
